@@ -40,7 +40,7 @@ public:
     static int getLocalAddr(int sockFd, Address &addr);
     static int getRemoteAddr(int sockFd, Address &addr);
     static int getSockError(int sockFd);
-    static uint32_t getHostByName(const std::string &host);
+    static uint32_t getHostByName(const std::string &hostname);
 
 }; /* end of class Sockutil */
 

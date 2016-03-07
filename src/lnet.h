@@ -25,7 +25,12 @@
     type(const type&) = delete;           \
     type& operator=(const type&) = delete
 
+#include <functional>
+
 LNET_NAMESPACE_BEGIN
+
+class IOLoop;
+using IOHandler = std::function<void (IOLoop*, int)>;
 
 LNET_NAMESPACE_END
 
