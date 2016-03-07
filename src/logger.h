@@ -6,7 +6,7 @@
  *       Description:
  *
  *            Verson: 1.0
- *           Created: 2016-03-06 09:18
+ *           Created: 2016-03-06
  *          Compiler: g++
  *
  *            Author: Jiewei Wei <weijieweijerry@163.com>
@@ -69,6 +69,8 @@ private:
 #define LOG_WARN(fmt, args...) Logger::getInstance().warn(__FILE__, __FUNCTION__, __LINE__, fmt, ##args)
 #define LOG_ERROR(fmt, args...) Logger::getInstance().error(__FILE__, __FUNCTION__, __LINE__, fmt, ##args)
 #define LOG_FATAL(fmt, args...) Logger::getInstance().fatal(__FILE__, __FUNCTION__, __LINE__, fmt, ##args)
+
+const char* errorMsg(int errorCode);
 
 LNET_NAMESPACE_END
 

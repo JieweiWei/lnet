@@ -6,7 +6,7 @@
  *       Description:
  *
  *            Verson: 1.0
- *           Created: 2016-03-06 09:47
+ *           Created: 2016-03-06
  *          Compiler: g++
  *
  *            Author: Jiewei Wei <weijieweijerry@163.com>
@@ -20,6 +20,7 @@
 #include <stdarg.h>
 #include <time.h>
 #include <unistd.h>
+#include <string.h>
 
 LNET_NAMESPACE_BEGIN
 
@@ -85,6 +86,12 @@ void Logger::log(const char *level, const char *file, const char *function, int 
     time_t now = time(NULL);
     strftime(buf, sizeof(buf), DateTimeFormat, gmtime(&now));
     fprintf(m_fd, "%s %s [%d] %s %s:%d %s\n", buf, level, getpid(), function, file, line, msg);
+}
+
+__thread char errorMsgBuf[1024] = {0};
+
+const char* errorMsg(int errorCode) {
+    return strerror_r(errorCode, errorMsgBuf, sizeof(errorMsgBuf));
 }
 
 LNET_NAMESPACE_END

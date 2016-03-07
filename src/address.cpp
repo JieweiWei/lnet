@@ -1,9 +1,9 @@
 /*
  * ==================================================================================
  *
- *          Filename: lnet.h
+ *          Filename: address.cpp
  *
- *       Description: Global definition of lnet.
+ *       Description:
  *
  *            Verson: 1.0
  *           Created: 2016-03-06
@@ -15,19 +15,19 @@
  * ==================================================================================
  */
 
-#ifndef __LNET_H__
-#define __LNET_H__
+#include "address.h"
 
-#define LNET_NAMESPACE_BEGIN namespace lnet {
-#define LNET_NAMESPACE_END   }
-
-#define DISALLOW_COPY_AND_ASSIGN(type)    \
-    type(const type&) = delete;           \
-    type& operator=(const type&) = delete
+#include <arpa/inet.h>
 
 LNET_NAMESPACE_BEGIN
 
+Address::Address(uint16_t port) {
+    bzero(&m_addr, sizeof(m_addr));
+}
+
+Address::Address(const std::string &ip, uint16_t port);
+
+uint32_t Address::ip() const;
+uint16_t Address::port() const;
+
 LNET_NAMESPACE_END
-
-
-#endif /* end of define __LNET_H__ */
