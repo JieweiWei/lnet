@@ -45,7 +45,7 @@ Notifier::~Notifier() {
 }
 
 void Notifier::start(IOLoop *loop) {
-    assert(m_efd >= 0);
+    assert(m_efd > 0);
     if (m_running) {
         LOG_WARN("notifier has started");
         return;
@@ -61,7 +61,7 @@ void Notifier::start(IOLoop *loop) {
 }
 
 void Notifier::stop() {
-    assert(m_efd >= 0);
+    assert(m_efd > 0);
     if (!m_running) {
         LOG_WARN("notifier has stopped");
         return;

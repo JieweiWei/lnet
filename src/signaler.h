@@ -31,8 +31,8 @@ public:
     ~Signaler();
     void start(IOLoop *loop);
     void stop();
-    int sfd() { return m_sfd; }
-    IOLoop* loop() { return m_loop; }
+    int sfd() const { return m_sfd; }
+    IOLoop* loop() const { return m_loop; }
 
 public:
     static int createSignalFd(const std::vector<int> &sigs);

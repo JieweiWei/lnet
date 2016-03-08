@@ -55,7 +55,7 @@ int Acceptor::listen(const Address &addr) {
 }
 
 void Acceptor::start(IOLoop *loop) {
-    assert(m_sockFd >= 0);
+    assert(m_sockFd > 0);
     if (m_running) {
         LOG_WARN("acceptor has started");
         return;
@@ -71,7 +71,7 @@ void Acceptor::start(IOLoop *loop) {
 }
 
 void Acceptor::stop() {
-    assert(m_sockFd >= 0);
+    assert(m_sockFd > 0);
     if (!m_running) {
         LOG_WARN("acceptor has stopped");
         return;

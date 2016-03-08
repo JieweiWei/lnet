@@ -35,6 +35,7 @@ LNET_NAMESPACE_BEGIN
 class IOLoop;
 class Signaler;
 class Notifier;
+class Timer;
 
 enum LNET_EVENT {
     LNET_NONE  = 0x00000000,
@@ -48,6 +49,7 @@ using ProcessCallback = std::function<void ()>;
 using SignalerHandler = std::function<void (const std::shared_ptr<Signaler>&, int)>;
 using NotifierHandler = std::function<void (const std::shared_ptr<Notifier>&)>;
 using NewConnectCallback = std::function<void (IOLoop*, int)>;
+using TimerHandler = std::function<void (const std::shared_ptr<Timer>&)>;
 
 LNET_NAMESPACE_END
 

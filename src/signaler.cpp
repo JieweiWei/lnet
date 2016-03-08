@@ -46,7 +46,7 @@ Signaler::~Signaler() {
 }
 
 void Signaler::start(IOLoop *loop) {
-    assert(m_sfd >= 0);
+    assert(m_sfd > 0);
     if (m_running) {
         LOG_WARN("signaler has started");
         return;
@@ -62,7 +62,7 @@ void Signaler::start(IOLoop *loop) {
 }
 
 void Signaler::stop() {
-    assert(m_sfd >= 0);
+    assert(m_sfd > 0);
     if (!m_running) {
         LOG_WARN("signaler has stopped");
         return;

@@ -33,7 +33,7 @@ public:
 
     void notify();
 
-    IOLoop* loop() { return m_loop; }
+    IOLoop* loop() const { return m_loop; }
 
 private:
     void onEvent(IOLoop*, int);
