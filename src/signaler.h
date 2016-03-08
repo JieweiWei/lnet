@@ -31,7 +31,7 @@ public:
     ~Signaler();
     void start(IOLoop *loop);
     void stop();
-    int sfd() const { return m_sfd; }
+    int sfd() const { return m_signalFd; }
     IOLoop* loop() const { return m_loop; }
 
 public:
@@ -42,7 +42,7 @@ private:
 
 private:
     IOLoop *m_loop;
-    int m_sfd;
+    int m_signalFd;
     bool m_running;
     std::vector<int> m_sigs;
     SignalerHandler m_handler;

@@ -40,7 +40,7 @@ private:
 
 private:
     IOLoop *m_loop;
-    int m_efd;
+    int m_eventFd;
     bool m_running;
     NotifierHandler m_handler;
 

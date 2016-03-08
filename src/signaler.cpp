@@ -34,42 +34,42 @@ Signaler::Signaler(const vector<int> &sigs, const SignalerHandler &handler)
     , m_running(false)
     , m_sigs(sigs)
     , m_handler(handler) {
-    m_sfd = createSignalFd(m_sigs);
+    m_signalFd = createSignalFd(m_sigs);
 }
 
 Signaler::~Signaler() {
-    if (m_sfd >= 0) {
-        close(m_sfd);
+    if (m_signalFd >= 0) {
+        close(m_signalFd);
     }
 
-    LOG_INFO("destoryed signaler %d", m_sfd);
+    LOG_INFO("destoryed signaler %d", m_signalFd);
 }
 
 void Signaler::start(IOLoop *loop) {
-    assert(m_sfd > 0);
+    assert(m_signalFd > 0);
     if (m_running) {
         LOG_WARN("signaler has started");
         return;
     }
-    LOG_INFO("starting signaler %d", m_sfd);
+    LOG_INFO("starting signaler %d", m_signalFd);
     m_running = true;
     m_loop = loop;
     m_loop->addHandler(
-        m_sfd,
+        m_signalFd,
         LNET_READ,
         bind(&Signaler::onSignal, shared_from_this(), _1, _2)
     );
 }
 
 void Signaler::stop() {
-    assert(m_sfd > 0);
+    assert(m_signalFd > 0);
     if (!m_running) {
         LOG_WARN("signaler has stopped");
         return;
     }
-    LOG_INFO("stopping signaler %d", m_sfd);
+    LOG_INFO("stopping signaler %d", m_signalFd);
     m_running = false;
-    m_loop->removeHandler(m_sfd);
+    m_loop->removeHandler(m_signalFd);
 }
 
 int Signaler::createSignalFd(const vector<int> &sigs) {
@@ -87,7 +87,7 @@ int Signaler::createSignalFd(const vector<int> &sigs) {
 
 void Signaler::onSignal(IOLoop*, int) {
     struct signalfd_siginfo sfdInfo;
-    if (read(m_sfd, &sfdInfo, sizeof(sfdInfo)) != sizeof(sfdInfo)) {
+    if (read(m_signalFd, &sfdInfo, sizeof(sfdInfo)) != sizeof(sfdInfo)) {
         LOG_ERROR("onSignal read error %s", errorMsg(errno));
         return;
     }
