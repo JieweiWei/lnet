@@ -23,10 +23,8 @@ LNET_NAMESPACE_BEGIN
 class SpinLock {
 public:
     SpinLock() : m_lock(0) {
-        lock();
     }
     ~SpinLock() {
-        unlock();
     }
     DISALLOW_COPY_AND_ASSIGN(SpinLock);
 

@@ -18,6 +18,7 @@
 #include "timer.h"
 
 #include "logger.h"
+#include "ioloop.h"
 
 #include <sys/timerfd.h>
 #include <unistd.h>

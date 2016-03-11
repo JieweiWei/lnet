@@ -19,6 +19,7 @@
 
 #include "sockutil.h"
 #include "logger.h"
+#include "ioloop.h"
 
 #include <fcntl.h>
 #include <unistd.h>

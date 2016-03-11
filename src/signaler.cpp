@@ -18,6 +18,7 @@
 #include "signaler.h"
 
 #include "logger.h"
+#include "ioloop.h"
 
 #include <signal.h>
 #include <sys/signalfd.h>

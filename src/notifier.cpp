@@ -18,6 +18,7 @@
 #include "notifier.h"
 
 #include "logger.h"
+#include "ioloop.h"
 
 #include <sys/eventfd.h>
 #include <unistd.h>

@@ -56,16 +56,17 @@ enum CONNECT_EVENT {
     CLOSE
 };
 
-using IOHandler = std::function<void (IOLoop*, int event)>;
-using ProcessCallback = std::function<void ()>;
-using SignalerHandler = std::function<void (const std::shared_ptr<Signaler>&, int sig)>;
-using NotifierHandler = std::function<void (const std::shared_ptr<Notifier>&)>;
-using NewConnectCallback = std::function<void (IOLoop*, int clientFd)>;
-using TimerHandler = std::function<void (const std::shared_ptr<Timer>&)>;
-using TimingWheelHandler = std::function<void (const std::shared_ptr<TimingWheel>&)>;
+using IOHandler               = std::function<void (IOLoop*, int event)>;
+using ProcessCallback         = std::function<void ()>;
+using SignalerHandler         = std::function<void (const std::shared_ptr<Signaler>&, int sig)>;
+using NotifierHandler         = std::function<void (const std::shared_ptr<Notifier>&)>;
+using NewConnectCallback      = std::function<void (IOLoop*, int clientFd)>;
+using TimerHandler            = std::function<void (const std::shared_ptr<Timer>&)>;
+using TimingWheelHandler      = std::function<void (const std::shared_ptr<TimingWheel>&)>;
 using ConnectionEventCallback = std::function<void (const std::shared_ptr<Connection>&, CONNECT_EVENT, const void *context)>;
+using Callback                = std::function<void ()>;
+using ServerRunCallback       = std::function<void (IOLoop*)>;
 
 LNET_NAMESPACE_END
-
 
 #endif /* end of define __LNET_H__ */
