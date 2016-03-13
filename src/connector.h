@@ -23,7 +23,7 @@
 LNET_NAMESPACE_BEGIN
 
 template <typename Dervied>
-class Connector : std::enable_shared_form_this<Dervied> {
+class Connector : public std::enable_shared_form_this<Dervied> {
 public:
     Connector();
     Connection(const std::string &device);
@@ -42,7 +42,7 @@ public:
     std::shared_ptr<Connection> lockConnection() { return m_connnection.lock(); }
 
     void send(const std::string &data);
-    void shutdonw();
+    void shutdown();
 
 protected:
     void handleRead(const char*, size_t) {}

@@ -25,8 +25,9 @@
 
 LNET_NAMESPACE_BEGIN
 
-class HttpConnection;
 class HttpRequest;
+class HttpResponse;
+class HttpConnection;
 
 struct HttpError {
     HttpError(int pcode = 200, const std::string &msg = "")
@@ -49,10 +50,16 @@ enum REQUEST_EVENT {
     REQUEST_ERROR
 };
 
-using Headers      = std::multimap<std::string, std::string, CaseKeyCmp>;
-using Params       = std::multimap<std::string, std::string>;
-using HttpCallback = std::function<void (const std::shared_ptr<HttpConnection>&, const HttpRequest&)>;
-using AuthCallback = std::function<HttpError (const HttpRequest&)>;
+enum RESPONSE_EVENT {
+    RESPONSE_COMPLETE,
+    RESPONSE_ERROR
+};
+
+using Headers          = std::multimap<std::string, std::string, CaseKeyCmp>;
+using Params           = std::multimap<std::string, std::string>;
+using HttpCallback     = std::function<void (const std::shared_ptr<HttpConnection>&, const HttpRequest&)>;
+using AuthCallback     = std::function<HttpError (const HttpRequest&)>;
+using ResponseCallback = std::function<void (const HttpResponse&)>;
 
 LNET_NAMESPACE_END
 

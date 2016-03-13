@@ -59,7 +59,7 @@ void Connector<Derivied>::send(const std::string &data) {
 }
 
 template <typename Derivied>
-void Connector<Derivied>::shutdonw() {
+void Connector<Derivied>::shutdown() {
     shared_ptr<Connection> con = m_connnection.lock();
     if (con) {
         con->shutdown();

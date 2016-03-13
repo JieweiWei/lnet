@@ -65,6 +65,7 @@ string HttpResponse::dump() {
     string ret(buf, n);
     n = snprintf(buf, sizeof(buf), "%d", int(body.size()));
     static const string ContentLengthKey = "Content-Length";
+    // ??? dump const
     headers.insert(make_pair(ContentLengthKey, string(buf, n)));
     for (auto it = headers.cbegin(); it != headers.end(); ++it) {
         n = snprintf(buf, sizeof(buf), "%s: %s\r\n", it->first.c_str(), it->second.c_str());

@@ -22,6 +22,7 @@
 #include "logger.h"
 #include "httprequest.h"
 #include "httpresponse.h"
+#include "httpconnection.h"
 
 using namespace std;
 

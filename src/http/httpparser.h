@@ -55,7 +55,7 @@ protected:
     virtual int onBody(const char*, size_t) { return 0; }
     virtual int onMessageComplete() { return 0; }
     virtual int onUpgrade(const char*, size_t) { return 0; }
-    virtual int onError(const HttpError &error) {  return 0;}
+    virtual int onError(const HttpError &error) { return 0; }
 
 private:
     int onParser(Event event, const char * at, size_t length);
