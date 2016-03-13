@@ -134,7 +134,7 @@ void HttpRequest::parseQuery() {
         } else {
             continue;
         }
-        params.insert(HttpUtil::unescape(keyValue.first), HttpUtil::unescape(keyValue.second));
+        params.insert(make_pair(HttpUtil::unescape(keyValue.first), HttpUtil::unescape(keyValue.second)));
     }
 }
 

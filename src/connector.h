@@ -22,15 +22,18 @@
 
 LNET_NAMESPACE_BEGIN
 
+class Address;
+
 template <typename Dervied>
-class Connector : public std::enable_shared_form_this<Dervied> {
+class Connector : public std::enable_shared_from_this<Dervied> {
 public:
+    using ConnectorCallback = std::function<void (const std::shared_ptr<Dervied> &con, bool connected)>;
+
     Connector();
-    Connection(const std::string &device);
+    Connector(const std::string &device);
     ~Connector();
     DISALLOW_COPY_AND_ASSIGN(Connector);
 
-    using ConnectorCallback = std::function(void (const std::shared_ptr<Dervied> &con, bool connected));
     int connect(
         IOLoop *loop,
         const Address &addr,

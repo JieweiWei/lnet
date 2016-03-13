@@ -40,6 +40,8 @@ public:
         m_httpCallbacks[path] = callback;
         m_authCallbacks[path] = auth;
     }
+    //void setHttpCallback(const std::string &path, const HttpCallback &callback);
+    //void setHttpCallback(const std::string &path, const HttpCallback &callback, const AuthCallback &auth);
 
 private:
     void onConnectEvent(const std::shared_ptr<Connection>& con,

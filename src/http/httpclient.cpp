@@ -22,6 +22,7 @@
 #include "httprequest.h"
 #include "logger.h"
 #include "sockutil.h"
+#include "connection.h"
 
 using namespace std;
 

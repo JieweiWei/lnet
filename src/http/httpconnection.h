@@ -30,9 +30,10 @@ class HttpResponse;
 
 class HttpConnection
     : public HttpParser
-    , std::enable_shared_from_this<HttpConnection> {
+    , public std::enable_shared_from_this<HttpConnection> {
 public:
     friend class HttpServer;
+
     using RequestCallback = std::function<void (const std::shared_ptr<HttpConnection>&, const HttpRequest&, REQUEST_EVENT, const void*)>;
 
     HttpConnection(const std::shared_ptr<Connection> &con, const RequestCallback &callback);

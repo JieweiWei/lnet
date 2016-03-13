@@ -38,12 +38,22 @@ int HttpServer::listen(const Address &addr) {
     return m_tcpserver->listen(addr, bind(&HttpServer::onConnectEvent, this, _1, _2, _3));
 }
 
+/*
+void HttpServer::setHttpCallback(const string &path, const HttpCallback &callback) {
+    m_httpCallbacks[path] = callback;
+}
+
+void HttpServer::setHttpCallback(const string &path, const HttpCallback &callback, const AuthCallback &auth) {
+    m_httpCallbacks[path] = callback;
+    m_authCallbacks[path] = auth;
+}*/
+
 void HttpServer::onConnectEvent(const shared_ptr<Connection> &con, CONNECT_EVENT event, const void *context) {
     switch (event) {
         case ESTABLISHED: {
             shared_ptr<HttpConnection> httpcon = make_shared<HttpConnection>(
                 con,
-                bind(&HttpServer::onRequest, this, _1, _2, _3)
+                bind(&HttpServer::onRequest, this, _1, _2, _3, _4)
             );
             con->setEventCallback(
                 bind(&HttpConnection::onConnectEvent, httpcon, _1, _2, _3)

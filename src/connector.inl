@@ -19,6 +19,7 @@
 #define __LNET_CONNECTOR_INL__
 
 #include "connection.h"
+#include "sockutil.h"
 
 using namespace std;
 
@@ -35,18 +36,20 @@ Connector<Derivied>::~Connector() {
 template <typename Derivied>
 int Connector<Derivied>::connect(IOLoop *loop, const Address &addr,
     const ConnectorCallback &callback, const std::string &device) {
-    int sockFd = SockUtil::create();
+    int sockFd = SockUtil::createSocket();
     if (sockFd < 0) {
         return sockFd;
     }
     if (!device.empty()) {
          SockUtil::bindDevice(sockFd, device);
     }
-    m_connnection = make_shared<Connection>(loop, m_sockFd);
-    m_connnection->setEventCallback(
-        bind(&Connector<Derivied>::onConnnectEvent, shared_from_this(), _1, _2, _3, callback)
+    shared_ptr<Connection> con = make_shared<Connection>(loop, sockFd);
+    m_connnection = con;
+    con->setEventCallback(
+        // ???
+        bind(&Connector<Derivied>::onConnnectEvent, this->shared_from_this(), _1, _2, _3, callback)
     );
-    m_connnection->connect(addr);
+    con->connect(addr);
 }
 
 template <typename Derivied>
@@ -74,12 +77,12 @@ void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
             return;
         case CONNECT:
             con->setEventCallback(
-                bind(&Connector<Derivied>::onConnnectEvent, shared_from_this(), _1, _2, _3)
+                bind(&Connector<Derivied>::onConnnectEvent, this->shared_from_this(), _1, _2, _3)
             );
-            callback(shared_from_this(), true);
+            callback(this->shared_from_this(), true);
             break;
         default:
-            callback(shared_from_this(), false);
+            callback(this->shared_from_this(), false);
             return;
 
     }
@@ -88,7 +91,7 @@ void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
 template <typename Derivied>
 void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
     CONNECT_EVENT event, const void *context) {
-    shared_ptr<Derivied> t = shared_from_this();
+    shared_ptr<Derivied> t = this->shared_from_this();
     switch(event) {
         case READ: {
             const string *buf = (const string*)context;
