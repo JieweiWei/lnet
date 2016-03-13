@@ -29,7 +29,7 @@ LNET_NAMESPACE_BEGIN
 class IOEvent;
 class Poller;
 
-class IOLoop : std::enable_shared_from_this<IOLoop> {
+class IOLoop : public std::enable_shared_from_this<IOLoop> {
 public:
     IOLoop();
     ~IOLoop();

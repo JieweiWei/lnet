@@ -24,7 +24,7 @@
 
 LNET_NAMESPACE_BEGIN
 
-class Signaler : std::enable_shared_from_this<Signaler> {
+class Signaler : public std::enable_shared_from_this<Signaler> {
 public:
     Signaler(const std::vector<int> &sigs, const SignalerHandler &handler);
     DISALLOW_COPY_AND_ASSIGN(Signaler);

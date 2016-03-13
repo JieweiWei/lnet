@@ -30,3 +30,6 @@
 # ctags
 src/tags
 src/http/tags
+
+#build
+build
