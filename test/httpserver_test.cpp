@@ -26,9 +26,9 @@ int main() {
     TcpServer tcpserver;
     HttpServer httpserver(&tcpserver);
     httpserver.setHttpCallback("/", bind(&handler, _1, _2));
-    httpserver.listen(Address(11181));
+    httpserver.listen(Address(11192));
     LOG_INFO("start server");
-    tcpserver.start(4);
+    tcpserver.start(1);
     LOG_INFO("stop server");
     return 0;
 }

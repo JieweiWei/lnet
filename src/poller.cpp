@@ -69,18 +69,19 @@ int Poller::poll(int timeout, const std::vector<IOEvent*> &ioevents) {
         LOG_ERROR("epoll_wait error %s", errorMsg(errno));
         return -1;
     }
+    //LOG_DEBUG("epoll wait num %d", num);
     for (int i = 0; i < num; ++i) {
         struct epoll_event *epollEvent = m_events + i;
         int fd = epollEvent->data.fd;
         int real = EPOLL_EVENT_TO_LNET_EVENT(epollEvent->events);
         IOEvent *ioevent = (size_t)fd < ioevents.size() ? ioevents[fd] : 0;
-        if (ioevent == NULL) {
+        if (!ioevent) {
             continue;
         }
         int expect = ioevent->events;
         if (real & ~expect) {
             epollEvent->events = LNET_EVENT_TO_EPOLL_EVENT(expect);
-            if (epoll_ctl(m_epollFd, expect ? EPOLL_CTL_MOD : EPOLL_CTL_DEL, fd, epollEvent) > 0) {
+            if (epoll_ctl(m_epollFd, expect ? EPOLL_CTL_MOD : EPOLL_CTL_DEL, fd, epollEvent) < 0) {
                 LOG_ERROR("epoll_ctl error %s real:%d, expect:%d, fd:%d", errorMsg(errno), real, expect, fd);
                 continue;
             }
@@ -105,8 +106,8 @@ int Poller::poll(int timeout, const std::vector<IOEvent*> &ioevents) {
 int Poller::add(int fd, int events) {
     assert(fd > 0);
     struct epoll_event epollEvent;
-    epollEvent.data.fd = fd;
     epollEvent.data.u64 = 0;
+    epollEvent.data.fd = fd;
     epollEvent.events = LNET_EVENT_TO_EPOLL_EVENT(events);
     if (epoll_ctl(m_epollFd, EPOLL_CTL_ADD, fd, &epollEvent) < 0) {
         LOG_ERROR("epoll_ctl add error %s", errorMsg(errno));

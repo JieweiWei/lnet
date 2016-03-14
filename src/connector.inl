@@ -47,7 +47,7 @@ int Connector<Derivied>::connect(IOLoop *loop, const Address &addr,
     m_connnection = con;
     con->setEventCallback(
         // ???
-        bind(&Connector<Derivied>::onConnnectEvent, this->shared_from_this(), _1, _2, _3, callback)
+        bind(&Connector<Derivied>::onConnnectEvent, this, _1, _2, _3, callback)
     );
     con->connect(addr);
 }
@@ -77,7 +77,7 @@ void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
             return;
         case CONNECT:
             con->setEventCallback(
-                bind(&Connector<Derivied>::onConnnectEvent, this->shared_from_this(), _1, _2, _3)
+                bind(&Connector<Derivied>::onConnnectEvent, this, _1, _2, _3)
             );
             callback(this->shared_from_this(), true);
             break;

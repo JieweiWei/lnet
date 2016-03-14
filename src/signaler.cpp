@@ -58,7 +58,7 @@ void Signaler::start(IOLoop *loop) {
     m_loop->addHandler(
         m_signalFd,
         LNET_READ,
-        bind(&Signaler::onSignal, shared_from_this(), _1, _2)
+        bind(&Signaler::onSignal, this, _1, _2)
     );
 }
 
@@ -78,6 +78,10 @@ int Signaler::createSignalFd(const vector<int> &sigs) {
     sigemptyset(&sigset);
     for (auto sig : sigs) {
         sigaddset(&sigset, sig);
+    }
+    if (sigprocmask(SIG_BLOCK, &sigset, NULL) < 0) {
+        LOG_ERROR("sigprocmask error");
+        return -1;
     }
     int sfd = signalfd(-1, &sigset, SFD_NONBLOCK | SFD_CLOEXEC);
     if (sfd < 0) {

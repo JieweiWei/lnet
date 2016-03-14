@@ -66,7 +66,7 @@ void IOLoop::start() {
 }
 
 void IOLoop::stop() {
-    if (m_running) {
+    if (!m_running) {
         LOG_WARN("ioloop has stopped");
         return;
     }
@@ -88,6 +88,7 @@ int IOLoop::addHandler(int fd, int events, const IOHandler &handler) {
         return -1;
     }
     m_events[fd] = new IOEvent(fd, events, handler);
+    //LOG_DEBUG("succ add event %d to fd %d", events, fd);
     return 0;
 }
 

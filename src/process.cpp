@@ -30,7 +30,7 @@ LNET_NAMESPACE_BEGIN
 
 Process::Process() : m_running(false) {
     m_main = getpid();
-    m_sfd = Signaler::createSignalFd(vector<int>({SIGTERM}));
+    m_signalFd = Signaler::createSignalFd(vector<int>({SIGTERM}));
 }
 
 Process::~Process() {
@@ -80,7 +80,7 @@ pid_t Process::create() {
         return pid;
     } else if (pid == 0) {
         m_children.clear();
-        close(m_sfd);
+        close(m_signalFd);
         return getpid();
     } else {
         m_children.insert(pid);
@@ -90,7 +90,7 @@ pid_t Process::create() {
 
 void Process::checkStop() {
     struct signalfd_siginfo sfdInfo;
-    if (read(m_sfd, &sfdInfo, sizeof(sfdInfo)) != sizeof(sfdInfo)) {
+    if (read(m_signalFd, &sfdInfo, sizeof(sfdInfo)) != sizeof(sfdInfo)) {
         /* no signal */
         return;
     }

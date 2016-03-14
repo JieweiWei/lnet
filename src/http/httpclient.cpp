@@ -62,11 +62,11 @@ void HttpClient::request(HttpRequest &request, const ResponseCallback &callback)
     Address addr(request.host, request.port);
     shared_ptr<HttpConnector> con = popConnect(addr.ip());
     if (con) {
-        con->setCallback(bind(&HttpClient::onResponse, shared_from_this(), _1, _2, _3, callback));
+        con->setCallback(bind(&HttpClient::onResponse, this, _1, _2, _3, callback));
         con->send(request.dump());
     } else {
         con = make_shared<HttpConnector>();
-        con->connect(m_loop, addr, bind(&HttpClient::onConnect, shared_from_this(), _1, _2, request.dump(), callback), m_device);
+        con->connect(m_loop, addr, bind(&HttpClient::onConnect, this, _1, _2, request.dump(), callback), m_device);
     }
 }
 
@@ -92,7 +92,7 @@ void HttpClient::onConnect(
         return;
     }
     // ??? move
-    con->setCallback(bind(&HttpClient::onResponse, shared_from_this(), _1, _2, _3, callback));
+    con->setCallback(bind(&HttpClient::onResponse, this, _1, _2, _3, callback));
     con->send(requestData);
 }
 

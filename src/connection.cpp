@@ -60,7 +60,7 @@ void Connection::shutdown(int after) {
     } else {
         m_loop->runInWheel(
             after,
-            bind(&Connection::handleClose, shared_from_this())
+            bind(&Connection::handleClose, this)
         );
     }
 }

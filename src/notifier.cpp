@@ -57,7 +57,7 @@ void Notifier::start(IOLoop *loop) {
     m_loop->addHandler(
         m_eventFd,
         LNET_READ,
-        bind(&Notifier::onEvent, shared_from_this(), _1, _2)
+        bind(&Notifier::onEvent, this, _1, _2)
     );
 }
 
