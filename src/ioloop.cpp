@@ -43,7 +43,7 @@ static const int MaxPollTimeout = 1000;
 IOLoop::IOLoop()
     : m_running(false) {
     m_poller = new Poller(this);
-    m_notifier = make_shared<Notifier>(bind(&IOLoop::onWake, shared_from_this(), _1));
+    m_notifier = make_shared<Notifier>(bind(&IOLoop::onWake, this, _1));
     m_wheel = make_shared<TimingWheel>(1000, 3600);
     m_events.resize(DefaultEventsCapacity, NULL);
 }
@@ -77,7 +77,7 @@ void IOLoop::stop() {
 }
 
 int IOLoop::addHandler(int fd, int events, const IOHandler &handler) {
-    if (m_events.size() <= fd) {
+    if (m_events.size() <= (size_t)fd) {
         m_events.resize(fd + 1, NULL);
     }
     if (m_events[fd] != NULL) {
@@ -92,7 +92,7 @@ int IOLoop::addHandler(int fd, int events, const IOHandler &handler) {
 }
 
 int IOLoop::updateHandler(int fd, int events) {
-    if (m_events.size() <= fd || m_events[fd] == NULL) {
+    if (m_events.size() <= (size_t)fd || m_events[fd] == NULL) {
         LOG_ERROR("invalid fd %d", fd);
     }
     if (m_events[fd]->events == events) {
@@ -106,7 +106,7 @@ int IOLoop::updateHandler(int fd, int events) {
 }
 
 int IOLoop::removeHandler(int fd) {
-    if (m_events.size() <= fd || m_events[fd] == NULL) {
+    if (m_events.size() <= (size_t)fd || m_events[fd] == NULL) {
         LOG_ERROR("invalid fd %d", fd);
         return -1;
     }
@@ -127,6 +127,8 @@ shared_ptr<Timer> IOLoop::runAfter(int after, const Callback &callback) {
         after,
         0
     );
+    timer->start(this);
+    return timer;
 }
 
 void IOLoop::addCallback(const Callback &callback) {
@@ -158,7 +160,7 @@ void IOLoop::handleCallbacks() {
     m_lock.lock();
     callbacks.swap(m_callbacks);
     m_lock.unlock();
-    for (auto callback : callbacks) {
+    for (auto& callback : callbacks) {
         callback();
     }
 }

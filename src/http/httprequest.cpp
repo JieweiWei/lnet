@@ -95,7 +95,7 @@ string HttpRequest::dump() {
     int n = 0;
     if (query.empty()) {
         n = snprintf(buf, sizeof(buf), "%s %s HTTP/%d.%d\r\n",
-            http_method_str(method), path.c_str(), query.c_str(), majorVersion, minorVersion);
+            http_method_str(method), path.c_str(), majorVersion, minorVersion);
     }
     string ret(buf, n);
     headers.erase(HostKey);

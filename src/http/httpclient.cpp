@@ -102,7 +102,7 @@ void HttpClient::pushConnect(const shared_ptr<HttpConnector> &con) {
     if (!c) {
         return;
     }
-    if (m_connectors.size() >= m_maxClients) {
+    if (m_connectors.size() >= (size_t)m_maxClients) {
         con->shutdown();
         return;
     }

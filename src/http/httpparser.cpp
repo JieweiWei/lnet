@@ -102,7 +102,7 @@ int HttpParser::execute(const char *buf, size_t count) {
     if (m_parser.upgrade) {
         onUpgrade(buf + n, count - n);
         return 0;
-    } else if (n != count) {
+    } else if ((size_t)n != count) {
         int code = m_errorCode != 0 ? m_errorCode : 400;
         HttpError error(code, http_errno_description((http_errno)m_parser.http_errno));
         LOG_ERROR("parser error %s", error.message.c_str());

@@ -101,6 +101,7 @@ void TcpServer::onRun() {
         bind(&TcpServer::onSignal, this, _1, _2)
     );
     m_signaler->start(m_loop);
+    m_idleWheel = make_shared<TimingWheel>(1000, 3600);
     m_idleWheel->start(m_loop);
     m_runCallback(m_loop);
 }

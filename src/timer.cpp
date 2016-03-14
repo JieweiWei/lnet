@@ -28,11 +28,11 @@ using namespace std;
 
 LNET_NAMESPACE_BEGIN
 
-Timer::Timer(const TimerHandler &handler, int repeat, int after) 
+Timer::Timer(const TimerHandler &handler, int repeat, int after)
     : m_loop(0)
     , m_running(false)
-    , m_handler(handler)
-    , m_repeated(false) {
+    , m_repeated(false)
+    , m_handler(handler) {
     m_timerFd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
     if (m_timerFd < 0) {
         LOG_ERROR("timer create error %s", errorMsg(errno));
@@ -75,8 +75,8 @@ void Timer::stop() {
 
 void Timer::reset(int repeat, int after) {
     static const uint64_t milliPerSec  = 1e3;
-    static const uint64_t microPerSec  = 1e6;
-    static const uint64_t nanoPerSec   = 1e9;
+    //static const uint64_t microPerSec  = 1e6;
+    //static const uint64_t nanoPerSec   = 1e9;
     static const uint64_t nanoPerMilli = 1e6;
 
     if (m_timerFd <= 0) {

@@ -30,10 +30,6 @@ using namespace std;
 
 LNET_NAMESPACE_BEGIN
 
-static int dummyFd() {
-    return open("/dev/null", O_RDONLY | O_CLOEXEC);
-}
-
 Acceptor::Acceptor(const NewConnectCallback &callback)
     : m_loop(0)
     , m_sockFd(0)
@@ -67,7 +63,7 @@ void Acceptor::start(IOLoop *loop) {
     m_loop->addHandler(
         m_sockFd,
         LNET_READ,
-        std::bind(&Acceptor::onAccept, shared_from_this(), _1, _2)
+        std::bind(&Acceptor::onAccept, this, _1, _2)
     );
 }
 

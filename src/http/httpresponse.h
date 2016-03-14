@@ -40,8 +40,8 @@ public:
     std::string dump();
 
     int code;
-    std::string body;
     Headers headers;
+    std::string body;
 
 }; /* end of class HttpResponse */
 

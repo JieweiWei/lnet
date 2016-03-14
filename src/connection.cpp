@@ -170,7 +170,7 @@ void Connection::handleWrite(const std::string &data) {
     iov[1].iov_base = (void*)data.data();
     iov[1].iov_len = data.size();
     ssize_t n = writev(m_sockFd, iov, 2);
-    if (n == totalSize) {
+    if ((size_t)n == totalSize) {
         m_sendBuf.clear();
         m_callback(shared_from_this(), WRITE_COMPLETE, NULL);
         // ???
@@ -189,7 +189,7 @@ void Connection::handleWrite(const std::string &data) {
             handleError();
         }
     } else {
-        if (m_sendBuf.size() < n) {
+        if (m_sendBuf.size() < (size_t)n) {
             m_sendBuf = data.substr(n - m_sendBuf.size());
         } else {
             m_sendBuf = m_sendBuf.substr(n) + data;

@@ -73,7 +73,7 @@ int Poller::poll(int timeout, const std::vector<IOEvent*> &ioevents) {
         struct epoll_event *epollEvent = m_events + i;
         int fd = epollEvent->data.fd;
         int real = EPOLL_EVENT_TO_LNET_EVENT(epollEvent->events);
-        IOEvent *ioevent = fd < ioevents.size() ? ioevents[fd] : 0;
+        IOEvent *ioevent = (size_t)fd < ioevents.size() ? ioevents[fd] : 0;
         if (ioevent == NULL) {
             continue;
         }
@@ -88,7 +88,7 @@ int Poller::poll(int timeout, const std::vector<IOEvent*> &ioevents) {
         // real -> expect ?
         (ioevent->handler)(m_loop, real);
     }
-    if (num == m_size && m_size != maxEventSize) {
+    if ((size_t)num == m_size && m_size != maxEventSize) {
         m_size *= 2;
         if (m_size > maxEventSize) {
             m_size = maxEventSize;

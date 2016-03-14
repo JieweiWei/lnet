@@ -18,5 +18,5 @@ include_directories(../)
 
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
-add_library(lnet_http ${SRCS})
-target_link_libraries(lnet_http lnet)
+add_library(lnethttp ${SRCS})
+target_link_libraries(lnethttp lnet)

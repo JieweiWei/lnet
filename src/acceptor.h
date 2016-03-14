@@ -24,7 +24,7 @@ LNET_NAMESPACE_BEGIN
 
 class Address;
 
-class Acceptor : public std::enable_shared_from_this<Acceptor> {
+class Acceptor {
 public:
     Acceptor(const NewConnectCallback &callback);
     ~Acceptor();

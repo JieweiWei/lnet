@@ -28,13 +28,13 @@ LNET_NAMESPACE_BEGIN
 static void dummyTimingWheelHandler(const shared_ptr<TimingWheel>&) {
 }
 
-TimingWheel::TimingWheel(int interval, int maxBuckets) 
+TimingWheel::TimingWheel(int interval, int maxBuckets)
     : m_loop(0)
+    , m_running(false)
     , m_interval(interval)
     , m_maxBuckets(maxBuckets)
-    , m_running(false)
     , m_nextBucket(0) {
-    m_timer = make_shared<Timer>(bind(&TimingWheel::onTime, shared_from_this(), _1), interval, 0);
+    m_timer = make_shared<Timer>(bind(&TimingWheel::onTime, this, _1), interval, 0);
     m_buckets.resize(maxBuckets);
 }
 

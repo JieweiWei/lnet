@@ -45,8 +45,8 @@ private:
 
 private:
     IOLoop* m_loop;
-    int m_timerFd;
     bool m_running;
+    int m_timerFd;
     bool m_repeated;
     TimerHandler m_handler;
 
