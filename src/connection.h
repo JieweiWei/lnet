@@ -61,7 +61,7 @@ public:
 private:
     void onHandler(IOLoop*, int event);
     void handleRead();
-    void handleWrite(const std::string &data);
+    void handleWrite(const std::string &data = "");
     void handleError();
     void handleClose();
     void handleConnect();

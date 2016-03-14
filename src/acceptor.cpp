@@ -31,7 +31,7 @@ using namespace std;
 LNET_NAMESPACE_BEGIN
 
 Acceptor::Acceptor(const NewConnectCallback &callback)
-    : m_loop(0)
+    : m_loop(NULL)
     , m_sockFd(0)
     , m_running(false)
     , m_callback(callback) {
@@ -63,7 +63,7 @@ void Acceptor::start(IOLoop *loop) {
     m_loop->addHandler(
         m_sockFd,
         LNET_READ,
-        std::bind(&Acceptor::onAccept, this, _1, _2)
+        bind(&Acceptor::onAccept, this, _1, _2)
     );
 }
 

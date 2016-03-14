@@ -51,7 +51,7 @@ void Connection::clearEventCallback() {
 }
 
 void Connection::shutdown(int after) {
-    if (isConnecting() || isConnected()) {
+    if (m_status == DisConnecting || m_status == Disconnected) {
         return;
     }
     m_status = DisConnecting;
@@ -126,7 +126,7 @@ void Connection::onHandler(IOLoop*, int event) {
         if (isConnecting()) {
             handleConnect();
         } else {
-            handleWrite("");
+            handleWrite();
         }
     }
     if (event & LNET_ERROR) {
@@ -138,7 +138,7 @@ void Connection::handleRead() {
     if (!isConnected()) {
         return;
     }
-    char buf[MaxReadBufSize] = {0};
+    char buf[MaxReadBufSize] = {'\0'};
     int n = read(m_sockFd, buf, sizeof(buf));
     if (n > 0) {
         string str(buf, n);
@@ -161,6 +161,7 @@ void Connection::handleWrite(const std::string &data) {
         return;
     }
     if (m_sendBuf.empty() && data.empty()) {
+        m_loop->updateHandler(m_sockFd, LNET_READ);
         return;
     }
     size_t totalSize = m_sendBuf.size() + data.size();
@@ -173,7 +174,6 @@ void Connection::handleWrite(const std::string &data) {
     if ((size_t)n == totalSize) {
         m_sendBuf.clear();
         m_callback(shared_from_this(), WRITE_COMPLETE, NULL);
-        // ???
         m_loop->updateHandler(m_sockFd, LNET_READ);
         updateActiveTime();
     } else if (n < 0) {
@@ -181,7 +181,6 @@ void Connection::handleWrite(const std::string &data) {
         LOG_ERROR("write error %s", errorMsg(err));
         if (err == EAGAIN || err == EWOULDBLOCK) {
             m_sendBuf.append(data);
-            // ???
             m_loop->updateHandler(m_sockFd, LNET_READ | LNET_WRITE);
         } else {
             // ???
