@@ -28,8 +28,8 @@ using namespace std;
 
 LNET_NAMESPACE_BEGIN
 
-Notifier::Notifier(const NotifierHandler &handler) 
-    : m_loop(0)
+Notifier::Notifier(const NotifierHandler &handler)
+    : m_loop(NULL)
     , m_running(false)
     , m_handler(handler) {
     m_eventFd = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
@@ -39,7 +39,7 @@ Notifier::Notifier(const NotifierHandler &handler)
 }
 
 Notifier::~Notifier() {
-    if (m_eventFd < 0) {
+    if (m_eventFd > 0) {
         close(m_eventFd);
     }
     LOG_INFO("destoryed notifier %d", m_eventFd);

@@ -119,7 +119,7 @@ string StringUtil::base64Decode(const string &str) {
     size_t retLen = str.size() * 3 / 4 + 4;
     string retStr(retLen, '\0');
     uint8_t *ret = (uint8_t*)&retStr[0];
-    if (base64_encode(ret, &retLen, (uint8_t*)retStr.data(), retStr.size()) != 0) {
+    if (base64_decode(ret, &retLen, (uint8_t*)retStr.data(), retStr.size()) != 0) {
         return string();
     }
     retStr.resize(retLen);

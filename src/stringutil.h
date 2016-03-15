@@ -57,6 +57,12 @@ public:
         ss << t;
         return ss.str();
     }
+    static std::string toString(const char *t) {
+        return std::string(t);
+    }
+    static std::string toString(const std::string &t) {
+        return std::string(t);
+    }
 
 }; /* end of class StringUtil */
 

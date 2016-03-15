@@ -86,7 +86,7 @@ int HttpParserSettings::onMessageComplete(struct http_parser *parser) {
     HTTPPARSER_ON_PARSE(ParserMessageComplete, NULL, 0);
 }
 
-static HttpParserSettings s_initHttpParserSetting;
+static HttpParserSettings s_initHttpParserSettings;
 
 HttpParser::HttpParser(enum http_parser_type type) {
     http_parser_init(&m_parser, type);

@@ -34,7 +34,7 @@ public:
     void stop();
 
     bool isMain() const { return m_main == getpid(); }
-    bool hasChildren() { return m_children.size() > 0; }
+    bool hasChildren() const { return m_children.size() > 0; }
 
 private:
     pid_t create();

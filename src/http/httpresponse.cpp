@@ -26,8 +26,8 @@ LNET_NAMESPACE_BEGIN
 HttpResponse::HttpResponse() : code(200) {
 }
 
-HttpResponse::HttpResponse(int pcode, const Headers &headers, const string &body)
-    : code(pcode), headers(headers), body(body) {
+HttpResponse::HttpResponse(int pcode, const Headers &headers, const string &pbody)
+    : code(pcode), headers(headers), body(pbody) {
 }
 
 HttpResponse::~HttpResponse() {
@@ -53,22 +53,22 @@ void HttpResponse::enableDate() {
     time_t now = time(NULL);
     struct tm t;
     gmtime_r(&now, &t);
-    char buf[128] = {0};
+    char buf[128] = {'\0'};
     int n = strftime(buf, sizeof(buf), "%a, %d %b %Y %H:%M:%S %Z", &t);
     static const string DateKey = "Date";
     headers.insert(make_pair(DateKey, string(buf, n)));
 }
 
 string HttpResponse::dump() {
-    char buf[1024] = {0};
+    char buf[1024] = {'\0'};
     int n = snprintf(buf, sizeof(buf), "HTTP/1.1 %d %s\r\n", code, HttpUtil::codeMessage(code).c_str());
     string ret(buf, n);
     n = snprintf(buf, sizeof(buf), "%d", int(body.size()));
     static const string ContentLengthKey = "Content-Length";
-    // ??? dump const
     headers.insert(make_pair(ContentLengthKey, string(buf, n)));
     for (auto it = headers.cbegin(); it != headers.end(); ++it) {
         n = snprintf(buf, sizeof(buf), "%s: %s\r\n", it->first.c_str(), it->second.c_str());
+        ret.append(buf, n);
     }
     return ret.append("\r\n").append(body);
 }

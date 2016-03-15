@@ -38,7 +38,7 @@ static void dummyRunCallback(IOLoop*) {
 }
 
 TcpServer::TcpServer()
-    : m_loop(0)
+    : m_loop(NULL)
     , m_running(false)
     , m_maxIdleTimeout(defaultIdleTimeout) {
     m_process = make_shared<Process>();
@@ -80,7 +80,6 @@ void TcpServer::stop() {
 
 void TcpServer::run() {
     if (m_running) {
-        LOG_WARN("tcpserver is running");
         return;
     }
     m_loop = new IOLoop();
@@ -134,7 +133,6 @@ void TcpServer::onSignal(const std::shared_ptr<Signaler> &signaler, int sig) {
 
 void TcpServer::onIdleConnectCheck(const std::shared_ptr<TimingWheel> &wheel,
     const std::weak_ptr<Connection> &con) {
-    // ???
     shared_ptr<Connection> c = con.lock();
     if (!c) {
         return;

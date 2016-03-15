@@ -67,7 +67,6 @@ private:
     );
 
 private:
-    // ???
     std::weak_ptr<Connection> m_connnection;
 
 }; /* end of class Connector */

@@ -60,6 +60,7 @@ void HttpRequest::parseUrl() {
     struct http_parser_url t_url;
     if (http_parser_parse_url(url.c_str(), url.size(), 0, &t_url) != 0) {
         LOG_ERROR("parseurl error %s", url.c_str());
+        return;
     }
     if (t_url.field_set & (1 << UF_SCHEMA)) {
         schema = url.substr(t_url.field_data[UF_SCHEMA].off, t_url.field_data[UF_SCHEMA].len);
@@ -90,12 +91,15 @@ string HttpRequest::dump() {
     static const string ContentLengthKey = "Content-Length";
 
     parseUrl();
-    char buf[1024] = {0};
+    char buf[1024] = {'\0'};
     path = path.empty() ? "/" : path;
     int n = 0;
     if (query.empty()) {
         n = snprintf(buf, sizeof(buf), "%s %s HTTP/%d.%d\r\n",
             http_method_str(method), path.c_str(), majorVersion, minorVersion);
+    } else {
+        n = snprintf(buf, sizeof(buf), "%s %s?%s HTTP/%d.%d\r\n",
+            http_method_str(method), path.c_str(), query.c_str(), majorVersion, minorVersion);
     }
     string ret(buf, n);
     headers.erase(HostKey);
@@ -110,7 +114,7 @@ string HttpRequest::dump() {
         n = snprintf(buf, sizeof(buf), "%d", int(body.size()));
         headers.insert(make_pair(ContentLengthKey, string(buf, n)));
     }
-    for (auto it = headers.cbegin(); it != headers.cend(); ++ it) {
+    for (auto it = headers.cbegin(); it != headers.cend(); ++it) {
         n = snprintf(buf, sizeof(buf), "%s: %s\r\n", it->first.c_str(), it->second.c_str());
         ret.append(buf, n);
     }
@@ -121,12 +125,10 @@ void HttpRequest::parseQuery() {
     if (query.empty() || !params.empty()) {
         return;
     }
-    static const string sep1 = "&";
-    static const string sep2 = "=";
-    vector<string> args = StringUtil::split(query, sep1);
+    vector<string> args = StringUtil::split(query, "&");
     pair<string, string> keyValue;
     for (auto arg : args) {
-        vector<string> parts = StringUtil::split(arg, sep2);
+        vector<string> parts = StringUtil::split(arg, "=");
         if (parts.size() == 2) {
             keyValue = make_pair(parts[0], parts[1]);
         } else if (parts.size() == 1) {

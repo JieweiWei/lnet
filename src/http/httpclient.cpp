@@ -72,13 +72,12 @@ void HttpClient::request(HttpRequest &request, const ResponseCallback &callback)
 
 void HttpClient::onResponse(
     const shared_ptr<HttpConnector> &con,
-    const HttpResponse resp,
+    const HttpResponse &resp,
     RESPONSE_EVENT event,
     const ResponseCallback &callback) {
     if (event == RESPONSE_COMPLETE) {
         pushConnect(con);
     }
-    // ??? move
     callback(resp);
 }
 
@@ -109,6 +108,7 @@ void HttpClient::pushConnect(const shared_ptr<HttpConnector> &con) {
     Address addr(0);
     if (SockUtil::getRemoteAddr(c->getSockFd(), addr) != 0) {
         con->shutdown();
+        return;
     }
     m_connectors.insert(make_pair(addr.ip(), con));
 }

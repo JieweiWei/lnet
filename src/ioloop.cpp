@@ -35,7 +35,7 @@ static struct IgnoreSigPipe {
     IgnoreSigPipe() {
         signal(SIGPIPE, SIG_IGN);
     }
-} initObj;
+} s_ignoreSigPipe;
 
 static const int DefaultEventsCapacity = 1024;
 static const int MaxPollTimeout = 1000;
@@ -95,6 +95,7 @@ int IOLoop::addHandler(int fd, int events, const IOHandler &handler) {
 int IOLoop::updateHandler(int fd, int events) {
     if (m_events.size() <= (size_t)fd || m_events[fd] == NULL) {
         LOG_ERROR("invalid fd %d", fd);
+        return -1;
     }
     if (m_events[fd]->events == events) {
         return 0;
@@ -161,7 +162,7 @@ void IOLoop::handleCallbacks() {
     m_lock.lock();
     callbacks.swap(m_callbacks);
     m_lock.unlock();
-    for (auto& callback : callbacks) {
+    for (auto callback : callbacks) {
         callback();
     }
 }

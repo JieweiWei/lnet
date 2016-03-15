@@ -54,7 +54,6 @@ int Connector<Derivied>::connect(IOLoop *loop, const Address &addr,
 
 template <typename Derivied>
 void Connector<Derivied>::send(const std::string &data) {
-    // ???
     shared_ptr<Connection> con = m_connnection.lock();
     if (con) {
         con->send(data);
@@ -74,7 +73,7 @@ void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
     CONNECT_EVENT event, const void *context, const ConnectorCallback &callback) {
     switch (event) {
         case CONNECTING:
-            return;
+            break;
         case CONNECT:
             con->setEventCallback(
                 bind(&Connector<Derivied>::onConnnectEvent, this, _1, _2, _3)
@@ -83,8 +82,7 @@ void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
             break;
         default:
             callback(this->shared_from_this(), false);
-            return;
-
+            break;
     }
 }
 

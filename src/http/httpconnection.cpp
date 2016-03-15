@@ -130,7 +130,6 @@ int HttpConnection::onError(const HttpError &error) {
 
 void HttpConnection::onConnectEvent(const shared_ptr<Connection> &con,
     CONNECT_EVENT event, const void *context) {
-    shared_ptr<HttpConnection> httpcon = shared_from_this();
     switch (event) {
         case READ: {
             const string *str = (const string*)context;

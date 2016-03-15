@@ -30,7 +30,8 @@ struct IOEvent {
     IOEvent(int _fd, int _events, const IOHandler &_handler)
         : fd(_fd)
         , events(_events)
-        , handler(_handler) {}
+        , handler(_handler) {
+    }
 
 }; /* end of struct IOEvent */
 

@@ -44,17 +44,17 @@ public:
     HttpParser(enum http_parser_type type);
     virtual ~HttpParser();
     DISALLOW_COPY_AND_ASSIGN(HttpParser);
-    enum http_parser_type getType() { return (http_parser_type)m_parser.type; }
+    enum http_parser_type getType() const { return (http_parser_type)m_parser.type; }
     int execute(const char *buf, size_t count);
 
 protected:
     virtual int onMessageBegin() { return 0; }
-    virtual int onUrl(const char*, size_t) { return 0; }
+    virtual int onUrl(const char *at, size_t length) { return 0; }
     virtual int onHeader(const std::string &field, const std::string &value) { return 0; }
     virtual int onHeadersComplete() { return 0; }
-    virtual int onBody(const char*, size_t) { return 0; }
+    virtual int onBody(const char *at, size_t length) { return 0; }
     virtual int onMessageComplete() { return 0; }
-    virtual int onUpgrade(const char*, size_t) { return 0; }
+    virtual int onUpgrade(const char *at, size_t length) { return 0; }
     virtual int onError(const HttpError &error) { return 0; }
 
 private:

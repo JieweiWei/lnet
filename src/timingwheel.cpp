@@ -29,7 +29,7 @@ static void dummyTimingWheelHandler(const shared_ptr<TimingWheel>&) {
 }
 
 TimingWheel::TimingWheel(int interval, int maxBuckets)
-    : m_loop(0)
+    : m_loop(NULL)
     , m_running(false)
     , m_interval(interval)
     , m_maxBuckets(maxBuckets)
@@ -61,65 +61,64 @@ void TimingWheel::stop() {
 }
 
 union Slot {
-    uint64_t bucketAndSize;
+    uint64_t bucketAndIndex;
     uint32_t parts[2];
 };
 
 uint64_t TimingWheel::add(const TimingWheelHandler &handler, int timeout) {
     int maxTimeout = m_interval * m_maxBuckets;
-    if (timeout > maxTimeout) {
-        LOG_ERROR("timeout %d > max %d", timeout, maxTimeout);
+    if (timeout >= maxTimeout) {
+        LOG_ERROR("timeout %d >= max %d", timeout, maxTimeout);
         return -1;
     }
     uint32_t bucket = (m_nextBucket + timeout / m_interval) % m_maxBuckets;
+    uint32_t index = m_buckets[bucket].size();
     m_buckets[bucket].push_back(handler);
-    uint32_t size = m_buckets[bucket].size();
     Slot slot;
     slot.parts[0] = bucket;
-    slot.parts[1] = size;
-    return slot.bucketAndSize;
+    slot.parts[1] = index;
+    return slot.bucketAndIndex;
 }
 
-uint64_t TimingWheel::update(uint64_t bucketAndSize, int timeout) {
+uint64_t TimingWheel::update(uint64_t bucketAndIndex, int timeout) {
     Slot slot;
-    slot.bucketAndSize = bucketAndSize;
+    slot.bucketAndIndex = bucketAndIndex;
     uint32_t bucket = slot.parts[0];
-    uint32_t size = slot.parts[1];
+    uint32_t index = slot.parts[1];
     if (bucket >= (uint32_t)m_maxBuckets) {
         LOG_ERROR("bucket %u >= max %d", bucket, m_maxBuckets);
         return -1;
     }
     TimingChan &chan = m_buckets[bucket];
-    if (size >= (uint32_t)(chan.size())) {
-        LOG_ERROR("size %u >= chan size %u", size, chan.size());
+    if (index >= (uint32_t)(chan.size())) {
+        LOG_ERROR("index %u >= chan size %u", index, chan.size());
         return -1;
     }
     // ??? handler move
-    TimingWheelHandler handler = chan[size];
-    chan[size] = bind(&dummyTimingWheelHandler, _1);
+    TimingWheelHandler&& handler = move(chan[index]);
+    chan[index] = bind(&dummyTimingWheelHandler, _1);
     return add(handler, timeout);
 }
 
-void TimingWheel::remove(uint64_t bucketAndSize) {
+void TimingWheel::remove(uint64_t bucketAndIndex) {
     Slot slot;
-    slot.bucketAndSize = bucketAndSize;
+    slot.bucketAndIndex = bucketAndIndex;
     uint32_t bucket = slot.parts[0];
-    uint32_t size = slot.parts[1];
+    uint32_t index = slot.parts[1];
     if (bucket >= (uint32_t)m_maxBuckets) {
         LOG_ERROR("bucket %u >= max %d", bucket, m_maxBuckets);
         return;
     }
     TimingChan &chan = m_buckets[bucket];
-    if (size >= (uint32_t)(chan.size())) {
-        LOG_ERROR("size %u >= chan size %u", size, chan.size());
+    if (index >= (uint32_t)(chan.size())) {
+        LOG_ERROR("size %u >= chan size %u", index, chan.size());
         return;
     }
-    chan[size] = bind(&dummyTimingWheelHandler, _1);
+    chan[index] = bind(&dummyTimingWheelHandler, _1);
 }
 
 void TimingWheel::onTime(const std::shared_ptr<Timer> &timer) {
-    int index = m_nextBucket;
-    TimingChan &chan = m_buckets[index];
+    TimingChan &chan = m_buckets[m_nextBucket];
     for (auto handler : chan) {
         handler(shared_from_this());
     }

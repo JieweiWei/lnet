@@ -30,7 +30,7 @@ LNET_NAMESPACE_BEGIN
 static const int defaultEventSize = 1024;
 static const int maxEventSize = 10240;
 
-Poller::Poller(IOLoop *loop) : m_loop(loop), m_events(NULL) {
+Poller::Poller(IOLoop *loop) : m_loop(loop) {
     m_epollFd = epoll_create1(EPOLL_CLOEXEC);
     if (m_epollFd < 0) {
         LOG_ERROR("epoll create error %s", errorMsg(errno));
@@ -119,8 +119,8 @@ int Poller::add(int fd, int events) {
 int Poller::mod(int fd, int events) {
     assert(fd > 0);
     struct epoll_event epollEvent;
-    epollEvent.data.fd = fd;
     epollEvent.data.u64 = 0;
+    epollEvent.data.fd = fd;
     epollEvent.events = LNET_EVENT_TO_EPOLL_EVENT(events);
     if (epoll_ctl(m_epollFd, EPOLL_CTL_MOD, fd, &epollEvent) < 0) {
         LOG_ERROR("epoll_ctl mod error %s", errorMsg(errno));

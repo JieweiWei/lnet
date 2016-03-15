@@ -31,7 +31,7 @@ using namespace std;
 LNET_NAMESPACE_BEGIN
 
 Signaler::Signaler(const vector<int> &sigs, const SignalerHandler &handler)
-    : m_loop(0)
+    : m_loop(NULL)
     , m_running(false)
     , m_sigs(sigs)
     , m_handler(handler) {
@@ -39,7 +39,7 @@ Signaler::Signaler(const vector<int> &sigs, const SignalerHandler &handler)
 }
 
 Signaler::~Signaler() {
-    if (m_signalFd >= 0) {
+    if (m_signalFd > 0) {
         close(m_signalFd);
     }
 

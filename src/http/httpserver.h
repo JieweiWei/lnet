@@ -40,11 +40,10 @@ public:
         m_httpCallbacks[path] = callback;
         m_authCallbacks[path] = auth;
     }
-    //void setHttpCallback(const std::string &path, const HttpCallback &callback);
-    //void setHttpCallback(const std::string &path, const HttpCallback &callback, const AuthCallback &auth);
+    // TODO web socket
 
 private:
-    void onConnectEvent(const std::shared_ptr<Connection>& con,
+    void onConnectEvent(const std::shared_ptr<Connection> &con,
         CONNECT_EVENT event, const void *context);
     void onRequest(const std::shared_ptr<HttpConnection> &con,
         const HttpRequest &request, REQUEST_EVENT event, const void *context);

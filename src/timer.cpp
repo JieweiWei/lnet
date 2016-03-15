@@ -29,7 +29,7 @@ using namespace std;
 LNET_NAMESPACE_BEGIN
 
 Timer::Timer(const TimerHandler &handler, int repeat, int after)
-    : m_loop(0)
+    : m_loop(NULL)
     , m_running(false)
     , m_repeated(false)
     , m_handler(handler) {

@@ -48,6 +48,7 @@ void Process::start(size_t num, const ProcessCallback &callback) {
     while (!m_children.empty()) {
         int status = 0;
         pid_t pid;
+        // TODO 正常退出 kill -9不重启
         if ((pid = waitpid(-1, &status, WNOHANG)) > 0) {
             m_children.erase(pid);
             if (!m_running) {

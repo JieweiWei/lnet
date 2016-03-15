@@ -58,12 +58,11 @@ private:
     IOLoop *m_loop;
     bool m_running;
     std::shared_ptr<Process> m_process;
-    std::vector<std::shared_ptr<Acceptor> > m_acceptors;
+    std::vector<std::shared_ptr<Acceptor>> m_acceptors;
     std::shared_ptr<Signaler> m_signaler;
     int m_maxIdleTimeout;
     std::shared_ptr<TimingWheel> m_idleWheel;
     std::set<pid_t> m_workers;
-    bool m_workerProc;
     ServerRunCallback m_runCallback;
 
 }; /* end of class Tcpserver */

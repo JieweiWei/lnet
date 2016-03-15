@@ -32,7 +32,7 @@
 LNET_NAMESPACE_BEGIN
 
 int SockUtil::createSocket() {
-    return socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, 0);
+    return socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
 }
 
 int SockUtil::bindAndListen(const Address &addr) {
@@ -91,7 +91,7 @@ int SockUtil::bindDevice(int sockFd, const std::string &device) {
 }
 
 int SockUtil::setNoDelay(int sockFd, bool on) {
-    int optvalue = on;
+    int optvalue = on ? 1 : 0;
     return setsockopt(
         sockFd,
         IPPROTO_TCP,
@@ -102,7 +102,7 @@ int SockUtil::setNoDelay(int sockFd, bool on) {
 }
 
 int SockUtil::setReusable(int sockFd, bool on) {
-    int optvalue = on;
+    int optvalue = on ? 1 : 0;
     return setsockopt(
         sockFd,
         SOL_SOCKET,
@@ -113,7 +113,7 @@ int SockUtil::setReusable(int sockFd, bool on) {
 }
 
 int SockUtil::setKeepAlive(int sockFd, bool on) {
-    int optvalue = on;
+    int optvalue = on ? 1 : 0;
     return setsockopt(
         sockFd,
         SOL_SOCKET,
@@ -131,15 +131,16 @@ int SockUtil::setKeepAlive(int sockFd, bool on) {
     }                                                           \
     addr = Address(sockaddr);                                   \
 } while (0)
+
 int SockUtil::getLocalAddr(int sockFd, Address &addr) {
     GET_ADDR(getsockname);
     return 0;
 }
+
 int SockUtil::getRemoteAddr(int sockFd, Address &addr) {
     GET_ADDR(getpeername);
     return 0;
 }
-#undef GET_ADDR
 
 int SockUtil::getSockError(int sockFd) {
     int error = 0;
@@ -167,6 +168,5 @@ uint32_t SockUtil::getHostByName(const std::string &hostname) {
     LOG_ERROR("getHostByName error");
     return -1;
 }
-
 
 LNET_NAMESPACE_END

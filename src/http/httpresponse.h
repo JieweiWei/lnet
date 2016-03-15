@@ -25,7 +25,7 @@ LNET_NAMESPACE_BEGIN
 class HttpResponse {
 public:
     HttpResponse();
-    HttpResponse(int code, const Headers &headers = Headers(), const std::string &body = "");
+    HttpResponse(int code, const Headers &headers = Headers(), const std::string &pbody = "");
     ~HttpResponse();
 
     void clear() {

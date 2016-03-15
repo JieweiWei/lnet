@@ -34,9 +34,11 @@ public:
     void start(IOLoop *loop);
     void stop();
 
+    IOLoop* loop() const { return m_loop; }
+
     uint64_t add(const TimingWheelHandler &handler, int timeout);
-    uint64_t update(uint64_t bucketAndSize, int timeout);
-    void remove(uint64_t bucketAndSize);
+    uint64_t update(uint64_t bucketAndIndex, int timeout);
+    void remove(uint64_t bucketAndIndex);
 
 private:
     void onTime(const std::shared_ptr<Timer> &timer);

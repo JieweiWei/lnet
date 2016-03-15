@@ -32,9 +32,9 @@ class HttpConnection
     : public HttpParser
     , public std::enable_shared_from_this<HttpConnection> {
 public:
-    friend class HttpServer;
-
     using RequestCallback = std::function<void (const std::shared_ptr<HttpConnection>&, const HttpRequest&, REQUEST_EVENT, const void*)>;
+
+    friend class HttpServer;
 
     HttpConnection(const std::shared_ptr<Connection> &con, const RequestCallback &callback);
     ~HttpConnection();
@@ -46,7 +46,7 @@ public:
     void send(HttpResponse &response, const Callback &callback);
     void send(int code, const Callback &callback, const std::string &body = "", const Headers &headers = Headers());
 
-    void shutdown(int after);;
+    void shutdown(int after);
     std::shared_ptr<Connection> lockConnection() const { return m_connection.lock(); }
     std::weak_ptr<Connection> getConnecion() const { return m_connection; }
 
@@ -66,7 +66,6 @@ private:
     void onConnectEvent(const std::shared_ptr<Connection> &con, CONNECT_EVENT event, const void *context);
 
 public:
-    // ???
     std::weak_ptr<Connection> m_connection;
     int m_sockFd;
     HttpRequest m_request;
