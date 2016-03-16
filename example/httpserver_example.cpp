@@ -7,6 +7,9 @@
 #include "logger.h"
 #include "address.h"
 
+#include <fcntl.h>
+#include <unistd.h>
+
 using namespace std;
 using namespace lnet;
 using namespace std::placeholders;
@@ -18,7 +21,13 @@ void handler(const shared_ptr<HttpConnection> &con, const HttpRequest &request) 
     response.setKeepAlive(true);
     response.enableDate();
 
-    response.body.append("Hello world");
+    string content =
+        "<html>"
+            "<body>"
+                "<h1 style=\"color:red\">hello world</h1>"
+            "</body>"
+        "</html>";
+    response.body.append(content);
     con->send(response);
 }
 

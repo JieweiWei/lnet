@@ -20,6 +20,8 @@
 
 #include "connection.h"
 #include "sockutil.h"
+#include "connector.h"
+#include "logger.h"
 
 using namespace std;
 
@@ -45,11 +47,12 @@ int Connector<Derivied>::connect(IOLoop *loop, const Address &addr,
     }
     shared_ptr<Connection> con = make_shared<Connection>(loop, sockFd);
     m_connnection = con;
+
     con->setEventCallback(
-        // ???
-        bind(&Connector<Derivied>::onConnnectEvent, this, _1, _2, _3, callback)
+        bind(&Connector<Derivied>::onConConnnectEvent, this, _1, _2, _3, callback)
     );
     con->connect(addr);
+    return 0;
 }
 
 template <typename Derivied>
@@ -69,20 +72,23 @@ void Connector<Derivied>::shutdown() {
 }
 
 template <typename Derivied>
-void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
+void Connector<Derivied>::onConConnnectEvent(const shared_ptr<Connection> &con,
     CONNECT_EVENT event, const void *context, const ConnectorCallback &callback) {
     switch (event) {
-        case CONNECTING:
+        case CONNECTING: {
             break;
-        case CONNECT:
+        }
+        case CONNECT: {
             con->setEventCallback(
                 bind(&Connector<Derivied>::onConnnectEvent, this, _1, _2, _3)
             );
             callback(this->shared_from_this(), true);
             break;
-        default:
+        }
+        default: {
             callback(this->shared_from_this(), false);
             break;
+        }
     }
 }
 
@@ -109,9 +115,6 @@ void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
             break;
     }
 }
-
-
-
 
 LNET_NAMESPACE_END
 

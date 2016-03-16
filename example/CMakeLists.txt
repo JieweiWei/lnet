@@ -8,5 +8,9 @@ include_directories(../src/http)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
-add_executable(httpserver_test httpserver_test.cpp)
-target_link_libraries(httpserver_test lnet lnethttp)
+add_executable(httpserver_example httpserver_example.cpp)
+target_link_libraries(httpserver_example lnet lnethttp)
+
+add_executable(httpclient_example httpclient_example.cpp)
+target_link_libraries(httpclient_example lnet lnethttp)
+

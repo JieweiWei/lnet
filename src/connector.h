@@ -54,7 +54,7 @@ protected:
     void handleClose(const void*) {}
 
 private:
-    void onConnnectEvent(
+    void onConConnnectEvent(
         const std::shared_ptr<Connection> &con,
         CONNECT_EVENT event,
         const void *context,
@@ -74,3 +74,4 @@ private:
 LNET_NAMESPACE_END
 
 #endif /* end of define __LNET_CONNECTOR_H__ */
+

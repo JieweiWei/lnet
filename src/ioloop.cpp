@@ -146,6 +146,7 @@ void IOLoop::runInWheel(int timeout, const TimingWheelHandler &handler) {
 }
 
 void IOLoop::run() {
+    // key
     while (m_running) {
         m_poller->poll(MaxPollTimeout, m_events);
         handleCallbacks();

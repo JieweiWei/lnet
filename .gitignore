@@ -33,3 +33,6 @@ src/http/tags
 
 #build
 build
+
+# tmp file
+.*.swp

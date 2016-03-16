@@ -114,6 +114,7 @@ void Connection::connect(const Address &addr) {
         isConnected() ? LNET_READ : LNET_WRITE,
         bind(&Connection::onHandler, con, _1, _2)
     );
+
     m_callback(con, CONNECT, NULL);
 }
 

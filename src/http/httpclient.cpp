@@ -17,12 +17,13 @@
 
 #include "httpclient.h"
 
-#include "httpconnector.h"
-#include "address.h"
 #include "httprequest.h"
-#include "logger.h"
-#include "sockutil.h"
 #include "connection.h"
+#include "sockutil.h"
+#include "logger.h"
+#include "address.h"
+#include "httpconnector.h"
+#include "connector.inl"
 
 using namespace std;
 
@@ -49,12 +50,12 @@ void HttpClient::request(
     enum http_method method,
     const Headers &headers,
     const string &body) {
-    HttpRequest request;
-    request.url = url;
-    request.headers = headers;
-    request.body = body;
-    request.method = method;
-    this->request(request, callback);
+    HttpRequest req;
+    req.url = url;
+    req.headers = headers;
+    req.body = body;
+    req.method = method;
+    request(req, callback);
 }
 
 void HttpClient::request(HttpRequest &request, const ResponseCallback &callback) {

@@ -28,8 +28,8 @@ LNET_NAMESPACE_BEGIN
 
 class HttpConnector : public HttpParser, public Connector<HttpConnector> {
 public:
-    friend class Connector<HttpConnector>;
     friend class HttpClient;
+    friend class Connector<HttpConnector>;
 
     using ResponseCallback = std::function<void (const std::shared_ptr<HttpConnector>&, const HttpResponse&, RESPONSE_EVENT)>;
 
