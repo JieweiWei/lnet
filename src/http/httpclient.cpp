@@ -87,11 +87,11 @@ void HttpClient::onConnect(
     bool connected,
     const string &requestData,
     const ResponseCallback &callback) {
+
     if (!connected) {
         LOG_ERROR("httpclient connect error");
         return;
     }
-    // ??? move
     con->setCallback(bind(&HttpClient::onResponse, this, _1, _2, _3, callback));
     con->send(requestData);
 }
