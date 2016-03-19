@@ -64,7 +64,7 @@ private:
 private:
     IOLoop *m_loop;
     int m_maxClients;
-    using IpConnector = std::multimap<uint32_t, std::weak_ptr<HttpConnector> >;
+    using IpConnector = std::multimap<uint32_t, std::weak_ptr<HttpConnector>>;
     IpConnector m_connectors;
     std::string m_device;
 

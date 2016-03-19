@@ -179,7 +179,7 @@ void Connection::handleWrite(const std::string &data) {
         updateActiveTime();
     } else if (n < 0) {
         int err = errno;
-        LOG_ERROR("write error %s", errorMsg(err));
+        LOG_INFO("write error %s", errorMsg(err));
         if (err == EAGAIN || err == EWOULDBLOCK) {
             m_sendBuf.append(data);
             m_loop->updateHandler(m_sockFd, LNET_READ | LNET_WRITE);

@@ -82,11 +82,12 @@ void HttpClient::onResponse(
 
     // add refer ???
     shared_ptr<HttpConnector> c = con->shared_from_this();
+    auto cb = move(callback);
 
     if (event == RESPONSE_COMPLETE) {
         pushConnect(con);
     }
-    callback(resp);
+    cb(resp);
 }
 
 void HttpClient::onConnect(
@@ -98,8 +99,10 @@ void HttpClient::onConnect(
         LOG_ERROR("httpclient connect error");
         return;
     }
-    con->setCallback(bind(&HttpClient::onResponse, shared_from_this(), _1, _2, _3, callback));
-    con->send(requestData);
+    string data = move(requestData);
+    ResponseCallback cb = move(callback);
+    con->setCallback(bind(&HttpClient::onResponse, shared_from_this(), _1, _2, _3, cb));
+    con->send(data);
 }
 
 void HttpClient::pushConnect(const shared_ptr<HttpConnector> &con) {
