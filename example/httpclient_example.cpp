@@ -1,29 +1,42 @@
+#include <iostream>
+
 #include "httpclient.h"
+
 #include "httprequest.h"
 #include "httpresponse.h"
 #include "ioloop.h"
 
-#include <stdio.h>
-#include <memory>
-
-using namespace lnet;
 using namespace std;
+using namespace lnet;
 
-void onResponse(IOLoop *loop, const HttpResponse &response) {
-    printf("%d\n", response.code);
-    const Headers &headers = response.headers;
-    for (auto it = headers.begin(); it != headers.end(); ++it) {
-        printf("%s: %s\n", it->first.c_str(), it->second.c_str());
+void onResponse(IOLoop* loop, const HttpResponse& resp)
+{
+    cout << resp.code << endl;
+    
+    auto iter = resp.headers.begin();
+
+    while(iter != resp.headers.end())
+    {
+        cout << iter->first << ": " << iter->second << endl;
+        ++iter;    
     }
-    printf("%d\n", (int)response.body.size());
+
+    cout << resp.body.size() << endl << endl;    
+
     loop->stop();
 }
 
-int main() {
+int main()
+{
     IOLoop loop;
-    shared_ptr<HttpClient> client = make_shared<HttpClient>(&loop);
-    client->request("http://127.0.0.1:11192/", bind(&onResponse, &loop, _1));
-    loop.start();
-    printf("exit\n");
-    return 0;
+    
+    shared_ptr<HttpClient> client = std::make_shared<HttpClient>(&loop);
+    
+    client->request("http://127.0.0.1:11181/abc", std::bind(&onResponse, &loop, _1));
+    
+    loop.start(); 
+
+    cout << "exit" << endl;
+    
+    return 0;   
 }

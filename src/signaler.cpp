@@ -58,7 +58,7 @@ void Signaler::start(IOLoop *loop) {
     m_loop->addHandler(
         m_signalFd,
         LNET_READ,
-        bind(&Signaler::onSignal, this, _1, _2)
+        bind(&Signaler::onSignal, shared_from_this(), _1, _2)
     );
 }
 

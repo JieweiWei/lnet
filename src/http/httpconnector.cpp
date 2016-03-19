@@ -42,7 +42,8 @@ void HttpConnector::clearCallback() {
     m_callback = bind(&dummyCallback, _1, _2, _3);
 }
 
-void HttpConnector::headRead(const char *buf, size_t count) {
+void HttpConnector::handleRead(const char *buf, size_t count) {
+    shared_ptr<HttpConnector> con = shared_from_this();
     execute(buf, count);
 }
 

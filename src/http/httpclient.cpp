@@ -50,6 +50,7 @@ void HttpClient::request(
     enum http_method method,
     const Headers &headers,
     const string &body) {
+
     HttpRequest req;
     req.url = url;
     req.headers = headers;
@@ -61,13 +62,15 @@ void HttpClient::request(
 void HttpClient::request(HttpRequest &request, const ResponseCallback &callback) {
     request.parseUrl();
     Address addr(request.host, request.port);
+
     shared_ptr<HttpConnector> con = popConnect(addr.ip());
+
     if (con) {
-        con->setCallback(bind(&HttpClient::onResponse, this, _1, _2, _3, callback));
+        con->setCallback(bind(&HttpClient::onResponse, shared_from_this(), _1, _2, _3, callback));
         con->send(request.dump());
     } else {
         con = make_shared<HttpConnector>();
-        con->connect(m_loop, addr, bind(&HttpClient::onConnect, this, _1, _2, request.dump(), callback), m_device);
+        con->connect(m_loop, addr, bind(&HttpClient::onConnect, shared_from_this(), _1, _2, request.dump(), callback), m_device);
     }
 }
 
@@ -76,6 +79,10 @@ void HttpClient::onResponse(
     const HttpResponse &resp,
     RESPONSE_EVENT event,
     const ResponseCallback &callback) {
+
+    // add refer ???
+    shared_ptr<HttpConnector> c = con->shared_from_this();
+
     if (event == RESPONSE_COMPLETE) {
         pushConnect(con);
     }
@@ -87,12 +94,11 @@ void HttpClient::onConnect(
     bool connected,
     const string &requestData,
     const ResponseCallback &callback) {
-
     if (!connected) {
         LOG_ERROR("httpclient connect error");
         return;
     }
-    con->setCallback(bind(&HttpClient::onResponse, this, _1, _2, _3, callback));
+    con->setCallback(bind(&HttpClient::onResponse, shared_from_this(), _1, _2, _3, callback));
     con->send(requestData);
 }
 

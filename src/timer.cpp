@@ -60,7 +60,7 @@ void Timer::start(IOLoop *loop) {
     m_loop->addHandler(
         m_timerFd,
         LNET_READ,
-        bind(&Timer::onTimer, this, _1, _2)
+        bind(&Timer::onTimer, shared_from_this(), _1, _2)
     );
 }
 

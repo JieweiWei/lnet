@@ -20,24 +20,22 @@
 
 #include "connection.h"
 #include "sockutil.h"
-#include "connector.h"
 #include "logger.h"
-
 
 using namespace std;
 
 LNET_NAMESPACE_BEGIN
 
-template <typename Derivied>
-Connector<Derivied>::Connector() {
+template <typename Derived>
+Connector<Derived>::Connector() {
 }
 
-template <typename Derivied>
-Connector<Derivied>::~Connector() {
+template <typename Derived>
+Connector<Derived>::~Connector() {
 }
 
-template <typename Derivied>
-int Connector<Derivied>::connect(IOLoop *loop, const Address &addr,
+template <typename Derived>
+int Connector<Derived>::connect(IOLoop *loop, const Address &addr,
     const ConnectorCallback &callback, const std::string &device) {
     int sockFd = SockUtil::createSocket();
     if (sockFd < 0) {
@@ -50,30 +48,30 @@ int Connector<Derivied>::connect(IOLoop *loop, const Address &addr,
     m_connnection = con;
 
     con->setEventCallback(
-        bind(&Connector<Derivied>::onConConnnectEvent, this, _1, _2, _3, callback)
+        bind(&Connector<Derived>::onConConnnectEvent, this->shared_from_this(), _1, _2, _3, callback)
     );
     con->connect(addr);
     return 0;
 }
 
-template <typename Derivied>
-void Connector<Derivied>::send(const std::string &data) {
+template <typename Derived>
+void Connector<Derived>::send(const std::string &data) {
     shared_ptr<Connection> con = m_connnection.lock();
     if (con) {
         con->send(data);
     }
 }
 
-template <typename Derivied>
-void Connector<Derivied>::shutdown() {
+template <typename Derived>
+void Connector<Derived>::shutdown() {
     shared_ptr<Connection> con = m_connnection.lock();
     if (con) {
         con->shutdown();
     }
 }
 
-template <typename Derivied>
-void Connector<Derivied>::onConConnnectEvent(const shared_ptr<Connection> &con,
+template <typename Derived>
+void Connector<Derived>::onConConnnectEvent(const shared_ptr<Connection> &con,
     CONNECT_EVENT event, const void *context, const ConnectorCallback &callback) {
     switch (event) {
         case CONNECTING: {
@@ -81,7 +79,7 @@ void Connector<Derivied>::onConConnnectEvent(const shared_ptr<Connection> &con,
         }
         case CONNECT: {
             con->setEventCallback(
-                bind(&Connector<Derivied>::onConnnectEvent, this, _1, _2, _3)
+                bind(&Connector<Derived>::onConnnectEvent, this->shared_from_this(), _1, _2, _3)
             );
             callback(this->shared_from_this(), true);
             break;
@@ -93,10 +91,10 @@ void Connector<Derivied>::onConConnnectEvent(const shared_ptr<Connection> &con,
     }
 }
 
-template <typename Derivied>
-void Connector<Derivied>::onConnnectEvent(const shared_ptr<Connection> &con,
+template <typename Derived>
+void Connector<Derived>::onConnnectEvent(const shared_ptr<Connection> &con,
     CONNECT_EVENT event, const void *context) {
-    shared_ptr<Derivied> t = this->shared_from_this();
+    shared_ptr<Derived> t = this->shared_from_this();
     switch(event) {
         case READ: {
             const string *buf = (const string*)context;

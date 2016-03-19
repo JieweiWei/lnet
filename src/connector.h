@@ -24,10 +24,10 @@ LNET_NAMESPACE_BEGIN
 
 class Address;
 
-template <typename Dervied>
-class Connector : public std::enable_shared_from_this<Dervied> {
+template <typename Derived>
+class Connector : public std::enable_shared_from_this<Derived> {
 public:
-    using ConnectorCallback = std::function<void (const std::shared_ptr<Dervied> &con, bool connected)>;
+    using ConnectorCallback = std::function<void (const std::shared_ptr<Derived> &con, bool connected)>;
 
     Connector();
     Connector(const std::string &device);

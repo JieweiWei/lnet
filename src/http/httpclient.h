@@ -47,7 +47,7 @@ public:
 private:
     void request(HttpRequest &request, const ResponseCallback &callback);
     void onResponse(
-        const std::shared_ptr<HttpConnector> &con,
+        const std::shared_ptr<HttpConnector> &wcon,
         const HttpResponse &resp,
         RESPONSE_EVENT event,
         const ResponseCallback &callback

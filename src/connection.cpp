@@ -58,9 +58,10 @@ void Connection::shutdown(int after) {
     if (after == 0) {
         handleClose();
     } else {
+        // here shared_from_this ???
         m_loop->runInWheel(
             after,
-            bind(&Connection::handleClose, this)
+            bind(&Connection::handleClose, shared_from_this())
         );
     }
 }
@@ -108,7 +109,6 @@ void Connection::connect(const Address &addr) {
     }
     updateActiveTime();
     shared_ptr<Connection> con = shared_from_this();
-    // ???
     m_loop->addHandler(
         m_sockFd,
         isConnected() ? LNET_READ : LNET_WRITE,

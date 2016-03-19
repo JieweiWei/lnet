@@ -14,3 +14,8 @@ target_link_libraries(httpserver_example lnet lnethttp)
 add_executable(httpclient_example httpclient_example.cpp)
 target_link_libraries(httpclient_example lnet lnethttp)
 
+add_executable(tcpserver_example tcpserver_example.cpp)
+target_link_libraries(tcpserver_example lnet lnethttp)
+
+add_executable(tcpclient_example tcpclient_example.cpp)
+target_link_libraries(tcpclient_example lnet lnethttp)

@@ -43,7 +43,8 @@ public:
     static void setMaxBodySize(size_t size) { ms_maxBodySize = size; }
 
 private:
-    void headRead(const char *buf, size_t count);
+    void handleRead(const char *buf, size_t count);
+
     int onMessageBegin();
     int onHeader(const std::string &field, const std::string &value);
     int onHeadersComplete();
