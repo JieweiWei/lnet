@@ -41,7 +41,7 @@ public:
         const std::string &device = ""
     );
 
-    std::weak_ptr<Connection> getConnection() { return m_connnection; }
+    std::weak_ptr<Connection> getConnection() const { return m_connnection; }
     std::shared_ptr<Connection> lockConnection() { return m_connnection.lock(); }
 
     void send(const std::string &data);
