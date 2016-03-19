@@ -48,7 +48,7 @@ int Connector<Derived>::connect(IOLoop *loop, const Address &addr,
     m_connnection = con;
 
     con->setEventCallback(
-        bind(&Connector<Derived>::onConConnnectEvent, this->shared_from_this(), _1, _2, _3, callback)
+        bind(&Connector<Derived>::onConConnectEvent, this->shared_from_this(), _1, _2, _3, callback)
     );
     con->connect(addr);
     return 0;
@@ -71,17 +71,18 @@ void Connector<Derived>::shutdown() {
 }
 
 template <typename Derived>
-void Connector<Derived>::onConConnnectEvent(const shared_ptr<Connection> &con,
+void Connector<Derived>::onConConnectEvent(const shared_ptr<Connection> &con,
     CONNECT_EVENT event, const void *context, const ConnectorCallback &callback) {
     switch (event) {
         case CONNECTING: {
             break;
         }
         case CONNECT: {
+            ConnectorCallback cb = move(callback);
             con->setEventCallback(
-                bind(&Connector<Derived>::onConnnectEvent, this->shared_from_this(), _1, _2, _3)
+                bind(&Connector<Derived>::onConnectEvent, this->shared_from_this(), _1, _2, _3)
             );
-            callback(this->shared_from_this(), true);
+            cb(this->shared_from_this(), true);
             break;
         }
         default: {
@@ -92,17 +93,18 @@ void Connector<Derived>::onConConnnectEvent(const shared_ptr<Connection> &con,
 }
 
 template <typename Derived>
-void Connector<Derived>::onConnnectEvent(const shared_ptr<Connection> &con,
+void Connector<Derived>::onConnectEvent(const shared_ptr<Connection> &con,
     CONNECT_EVENT event, const void *context) {
     shared_ptr<Derived> t = this->shared_from_this();
     switch(event) {
         case READ: {
             const string *buf = (const string*)context;
+            //LOG_DEBUG("handle str %s", buf->c_str());
             t->handleRead(buf->data(), buf->size());
             break;
         }
         case  WRITE_COMPLETE:
-            t->handWriteConmplete(context);
+            t->handleWriteComplete(context);
             break;
         case ERROR:
             t->handleError(context);

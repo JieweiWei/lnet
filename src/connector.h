@@ -41,7 +41,7 @@ public:
         const std::string &device = ""
     );
 
-    std::weak_ptr<Connection> getConnection() const { return m_connnection; }
+    std::weak_ptr<Connection> getConnection() { return m_connnection; }
     std::shared_ptr<Connection> lockConnection() { return m_connnection.lock(); }
 
     void send(const std::string &data);
@@ -49,18 +49,18 @@ public:
 
 protected:
     void handleRead(const char*, size_t) {}
-    void handWriteConmplete(const void*) {}
+    void handleWriteComplete(const void*) {}
     void handleError(const void*) {}
     void handleClose(const void*) {}
 
 private:
-    void onConConnnectEvent(
+    void onConConnectEvent(
         const std::shared_ptr<Connection> &con,
         CONNECT_EVENT event,
         const void *context,
         const ConnectorCallback &callback
     );
-    void onConnnectEvent(
+    void onConnectEvent(
         const std::shared_ptr<Connection> &con,
         CONNECT_EVENT event,
         const void *context
