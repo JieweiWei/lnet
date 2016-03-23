@@ -86,7 +86,6 @@ int Poller::poll(int timeout, const std::vector<IOEvent*> &ioevents) {
                 continue;
             }
         }
-        // real -> expect ?
         (ioevent->handler)(m_loop, real);
     }
     if ((size_t)num == m_size && m_size != maxEventSize) {

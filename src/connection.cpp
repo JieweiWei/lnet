@@ -51,14 +51,13 @@ void Connection::clearEventCallback() {
 }
 
 void Connection::shutdown(int after) {
-    if (m_status == DisConnecting || m_status == Disconnected) {
+    if (m_status == Disconnecting || m_status == Disconnected) {
         return;
     }
-    m_status = DisConnecting;
+    m_status = Disconnecting;
     if (after == 0) {
         handleClose();
     } else {
-        // here shared_from_this ???
         m_loop->runInWheel(
             after,
             bind(&Connection::handleClose, shared_from_this())

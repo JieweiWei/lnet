@@ -153,10 +153,11 @@ void TcpServer::onIdleConnectCheck(const std::shared_ptr<TimingWheel> &wheel,
 
 void TcpServer::onNewConnection(IOLoop *loop, int fd,
     const ConnectionEventCallback &callback) {
+    /* 如果accept新链接，创建Connection对象并未其设置回调函数 */
     shared_ptr<Connection> con = make_shared<Connection>(loop, fd);
     con->setEventCallback(callback);
     con->onEstablished();
-    // ???
+    /* 链接建立后设置超时关闭 */
     int after = m_maxIdleTimeout / 2 + random() % m_maxIdleTimeout;
     m_idleWheel->add(
         bind(&TcpServer::onIdleConnectCheck, this, _1, weak_ptr<Connection>(con)),

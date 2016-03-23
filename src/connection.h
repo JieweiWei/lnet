@@ -32,7 +32,7 @@ public:
         None,
         Connecting,
         Connected,
-        DisConnecting,
+        Disconnecting,
         Disconnected
     };
 

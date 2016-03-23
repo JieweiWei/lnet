@@ -41,6 +41,7 @@ int HttpServer::listen(const Address &addr) {
 void HttpServer::onConnectEvent(const shared_ptr<Connection> &con, CONNECT_EVENT event, const void *context) {
     switch (event) {
         case ESTABLISHED: {
+            /* tcp链接建立后，创建http链接并为其设置回调函数 */
             shared_ptr<HttpConnection> httpcon = make_shared<HttpConnection>(
                 con,
                 bind(&HttpServer::onRequest, this, _1, _2, _3, _4)
@@ -62,7 +63,7 @@ void HttpServer::onRequest(const shared_ptr<HttpConnection> &con, const HttpRequ
     switch (event) {
         case REQUEST_UPGRADE:
             // TODO web socket
-            LOG_INFO("not support web socket");
+            LOG_WARN("not support web socket");
             break;
         case REQUEST_ERROR:
             onError(con, *(HttpError*)context);
