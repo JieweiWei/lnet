@@ -80,7 +80,6 @@ void HttpClient::onResponse(
     RESPONSE_EVENT event,
     const ResponseCallback &callback) {
 
-    // add refer ???
     shared_ptr<HttpConnector> c = con->shared_from_this();
     auto cb = move(callback);
 

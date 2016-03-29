@@ -183,7 +183,6 @@ void Connection::handleWrite(const std::string &data) {
             m_sendBuf.append(data);
             m_loop->updateHandler(m_sockFd, LNET_READ | LNET_WRITE);
         } else {
-            // ???
             m_sendBuf.clear();
             handleError();
         }
@@ -217,7 +216,6 @@ void Connection::handleConnect() {
         handleError();
         return;
     }
-    // ???
     m_loop->updateHandler(m_sockFd, LNET_READ);
     updateActiveTime();
     m_status = Connected;

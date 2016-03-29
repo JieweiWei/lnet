@@ -84,7 +84,6 @@ void Acceptor::onAccept(IOLoop* loop, int) {
         int err = errno;
         if (err == EMFILE || err == ENFILE) {
             LOG_ERROR("accept error %s", errorMsg(err));
-            // ????
             clientFd = accept(m_sockFd, NULL, NULL);
             close(clientFd);
         }

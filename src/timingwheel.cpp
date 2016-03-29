@@ -94,7 +94,6 @@ uint64_t TimingWheel::update(uint64_t bucketAndIndex, int timeout) {
         LOG_ERROR("index %u >= chan size %u", index, chan.size());
         return -1;
     }
-    // ??? handler move
     TimingWheelHandler&& handler = move(chan[index]);
     chan[index] = bind(&dummyTimingWheelHandler, _1);
     return add(handler, timeout);

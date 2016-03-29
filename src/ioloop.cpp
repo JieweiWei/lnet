@@ -72,7 +72,6 @@ void IOLoop::stop() {
     }
     LOG_INFO("ioloop is stopping");
     m_running = false;
-    // ??? not stop?
     m_notifier->notify();
 }
 
@@ -137,7 +136,6 @@ void IOLoop::addCallback(const Callback &callback) {
     m_lock.lock();
     m_callbacks.push_back(callback);
     m_lock.unlock();
-    // ???
     m_notifier->notify();
 }
 
