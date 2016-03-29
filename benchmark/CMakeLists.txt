@@ -8,3 +8,5 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 add_executable(lnet_ab lnet_ab.cpp)
 target_link_libraries(lnet_ab lnet lnethttp)
 
+file(COPY tornado_ab.py DESTINATION ${CMAKE_BINARY_DIR}/bin)
+file(COPY django_ab DESTINATION ${CMAKE_BINARY_DIR}/bin)
