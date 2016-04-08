@@ -1,5 +1,5 @@
 # lnet
-lnet is a lightweight frame network.
+lnet is a lightweight network frame.
 
 ## requirement
 
