@@ -15,14 +15,14 @@ $ cmake ..
 $ make
 ```
 
-## install
-
-```
-$ make install
-```
-
 ## run example
 ```
 $ cd build/bin
 $ ./httpserver_example
+```
+
+## install
+
+```
+$ make install
 ```
